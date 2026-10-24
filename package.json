@@ -1,7 +1,7 @@
 {
   "name": "dsh-memory-layer",
   "description": "Remembers preferences and decisions across sessions and brings them back in new ones; data stays on your machine.",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "type": "module",
   "main": "./index.mjs",
   "exports": {

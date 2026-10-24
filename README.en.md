@@ -2,7 +2,7 @@
 
 > **A memory layer for DeepSeek Harness**: one local file, zero services, zero API calls — recall driven by **trigger signals**, so the right memory shows up at the right moment.
 
-**v0.10.1** · MIT License · DSH 0.2.x (`>=0.2.0-rc.2 <0.3.0-0`, tested on the 0.2.1-rc.2 desktop app) · Node >= 22.19.0
+**v0.10.2** · MIT License · DSH 0.2.x (`>=0.2.0-rc.2 <0.3.0-0`, tested on the 0.2.1-rc.3 desktop app) · Node >= 22.19.0
 
 ---
 
@@ -142,6 +142,7 @@ Important memories (user preferences / decisions / corrections) go through DSH's
 
 | Version | Date | Changes |
 |---|---|---|
+| **v0.10.2** | 2026-10-25 | Rewrote the intro line; tested desktop version is now 0.2.1-rc.3. No functional change |
 | **v0.10.1** | 2026-10-25 | Rewrote the plugin card copy: localized title and one-line summary in `locale` `meta`, and a `description` without the version prefix or feature dump; no functional changes |
 | **v0.10.0** | 2026-10-05 | **Rebuilt as a memory layer**: trigger-driven recall (`trigger`/`realm`/`mtype`/`mkey` columns), type-priority ordering, five cleanup rules with tombstones and `compact.log`, workflow promotion and chains, injection budget (<=8 items / <=1200 chars), `compact`/`dump`; **removed** dream/reflect/conflict-adjudication/audit and the automatic Markdown mirror |
 | v0.9.2 | 2026-09-29 | Removed dead modules and config keys; docs aligned with implementation |
