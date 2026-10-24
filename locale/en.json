@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Memory Layer",
+    "description": "Remembers preferences and decisions across sessions and brings them back in new ones; data stays on your machine."
+  }
+}

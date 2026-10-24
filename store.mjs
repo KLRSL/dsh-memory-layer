@@ -338,7 +338,14 @@ export function setEntryStatus(fp, status, opts = {}) {
 export function restoreEntry(fp) {
   db.openDb()
   const existing = db.getByFp(fp)
-  if (existing) return { ok: false, error: `[fp:${fp}] 仍存在，无需恢复` }
+  if (existing) {
+    // v0.10.1 修：墓碑（status=deleted / archived）的行仍在库里，旧实现一律报「仍存在，无需恢复」，
+    // 于是 compact 判了墓碑之后 memory action=restore 永远救不回来（只能手改 SQL）。
+    // 正确语义：行还在但非 active → 把状态翻回 active（墓碑复活），不需要读备份。
+    if (existing.status === 'active') return { ok: false, error: `[fp:${fp}] 仍存在（active），无需恢复` }
+    db.setStatus(fp, 'active')
+    return { ok: true, fp, layer: existing.layer, text: existing.text, from: existing.status, note: `墓碑已复活（${existing.status} → active）` }
+  }
   const backups = db.listBackups() // 最新在前
   for (const name of backups) {
     const e = db.readEntryFromBackup(fp, name)

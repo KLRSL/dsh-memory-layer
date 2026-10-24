@@ -2,7 +2,7 @@
 
 > **给 DeepSeek Harness 的记忆层**：本地单文件、零服务、零 API，靠**触发信号**把该想起的记忆在该想起的时候拿出来。
 
-**v0.10.0** · MIT License · DSH ≥ 0.1.1-rc.2（已在 0.2.0-rc.2 桌面版实测）· Node ≥ 22.19.0
+**v0.10.1** · MIT License · DSH 0.2.x（`>=0.2.0-rc.2 <0.3.0-0`，0.2.1-rc.2 桌面版实测）· Node ≥ 22.19.0
 
 ---
 
@@ -65,15 +65,25 @@
 
 ## 安装
 
-```bash
-# 需要已安装 git；--profile 换成你的 profile 名
-dsh plugin --profile web add github:KLRSL/dsh-memory-layer
+### 桌面版：按包名安装（推荐）
 
-# 本地开发（link）
-dsh plugin --profile web add link:./dsh-memory-layer
+1. 打开 DSH 桌面版 → 左侧 **插件** → **加插件**；
+2. 在包名输入框填 `dsh-memory-layer`，点 **安装**（安装完自动启用）。
+
+命令行等价：
+
+```bash
+# 把 desktop 换成你的 profile 名
+dsh plugin --profile desktop add dsh-memory-layer
 ```
 
-装完重启 DSH（桌面版会热挂载）。
+### 本地开发（link）
+
+```bash
+dsh plugin --profile desktop add link:./dsh-memory-layer
+```
+
+安装完重启 DSH 生效（开了 HMR 的 profile 会热挂载）。
 
 ## 用法
 
@@ -132,6 +142,7 @@ dsh plugin --profile web add link:./dsh-memory-layer
 
 | 版本 | 日期 | 变更 |
 |---|---|---|
+| **v0.10.1** | 2026-10-25 | 插件卡片文案重写：中英双语显示名与一句话简介（`locale` 的 `meta`），`description` 去掉版本号与功能罗列；功能无变更 |
 | **v0.10.0** | 2026-10-05 | **重构为「记忆层」**：新增触发式召回（`trigger` + `realm` + `mtype` + `mkey` 四列）、类型优先级排序、五条清理规则 + 墓碑 + `compact.log`、工作流从重复中升级并成链、注入预算（≤8 条 / ≤1200 字符）、`compact`/`dump`；**移除**记忆代谢（dream）、深度反思（reflect）、冲突裁决、结构化审计与自动 Markdown 镜像 |
 | v0.9.2 | 2026-09-29 | 删死模块与死配置键；文档与实现对齐（配置表/API 表/测试数） |
 | v0.9.1 | 2026-09-29 | 移除管理 UI，插件退化为纯宿主能力 |

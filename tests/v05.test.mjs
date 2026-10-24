@@ -179,6 +179,19 @@ test('restoreEntry：从备份回滚单条目，保留元数据', () => {
   assert.equal(dup.ok, false, '已存在时不重复恢复')
 })
 
+test('restoreEntry：墓碑（deleted）可直接复活，不报「仍存在」（v0.10.1）', () => {
+  db.upsertEntry({ fp: 'rf-tomb', layer: 'longterm', kind: '知识', text: '被 compact 判了墓碑的条目', weight: 10, pinned: 1, status: 'active' })
+  db.setStatus('rf-tomb', 'deleted')
+  const rs = I.restoreEntry('rf-tomb')
+  assert.equal(rs.ok, true, '墓碑可复活')
+  assert.equal(db.getByFp('rf-tomb').status, 'active')
+  assert.equal(db.getByFp('rf-tomb').text, '被 compact 判了墓碑的条目', '文本不变')
+  // active 的条目仍不允许「恢复」（防误覆盖语义保留）
+  const dup = I.restoreEntry('rf-tomb')
+  assert.equal(dup.ok, false)
+  assert.match(String(dup.error), /仍存在/)
+})
+
 test('stats 集成：dbPath/vectors/migration 可序列化', () => {
   const s = db.stats()
   assert.ok(s.dbPath.endsWith('biomemory.db'))

@@ -45,7 +45,15 @@ export function compact({ now = new Date(), dryRun = false, rules = RULES } = {}
   const log = []
   let tombstoned = 0
   let decayed = 0
+  let skippedPinned = 0
   for (const e of all) {
+    // v0.10.1 修：锁定（pinned）条目豁免全部清理规则。
+    // 旧实现无视 pinned —— 实测把 3 条已锁定的核心条目（插件全景 / DSH web 三项契约 /
+    // 用词与合规化方向）按 fact-ttl>30d 判了墓碑，与「锁定=不遗忘」的语义直接矛盾。
+    if (e.pinned) {
+      skippedPinned++
+      continue
+    }
     const used = e.last_accessed || e.created_at
     const age = ageDays(used, now)
     const hits = Number(e.hits || 0)
@@ -70,7 +78,7 @@ export function compact({ now = new Date(), dryRun = false, rules = RULES } = {}
     // 规则 4：error / decision 永不自动淘汰（显式标记已解决由使用者 update 处理）
   }
   if (!dryRun) appendLog(log)
-  return { scanned: all.length, tombstoned, decayed, dryRun, log }
+  return { scanned: all.length, tombstoned, decayed, skippedPinned, dryRun, log }
 }
 
 /** 可读导出（dump）：把活跃记忆按类型写一份 Markdown，返回文件路径与计数 */

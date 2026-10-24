@@ -2,7 +2,7 @@
 
 > **A memory layer for DeepSeek Harness**: one local file, zero services, zero API calls — recall driven by **trigger signals**, so the right memory shows up at the right moment.
 
-**v0.10.0** · MIT License · DSH >= 0.1.1-rc.2 (tested on 0.2.0-rc.2 desktop) · Node >= 22.19.0
+**v0.10.1** · MIT License · DSH 0.2.x (`>=0.2.0-rc.2 <0.3.0-0`, tested on the 0.2.1-rc.2 desktop app) · Node >= 22.19.0
 
 ---
 
@@ -65,15 +65,25 @@ A chain records **order, not causation** — it does not pretend to know why, on
 
 ## Install
 
-```bash
-# git required; replace --profile with your profile name
-dsh plugin --profile web add github:KLRSL/dsh-memory-layer
+### Desktop app: install by package name (recommended)
 
-# local development (link)
-dsh plugin --profile web add link:./dsh-memory-layer
+1. Open the DSH desktop app → **Plugins** in the sidebar → **Add plugin**;
+2. Type the package name `dsh-memory-layer` and click **Install** (it is enabled automatically).
+
+CLI equivalent:
+
+```bash
+# replace desktop with your profile name
+dsh plugin --profile desktop add dsh-memory-layer
 ```
 
-Restart DSH afterwards (the desktop app hot-mounts it).
+### Local development (link)
+
+```bash
+dsh plugin --profile desktop add link:./dsh-memory-layer
+```
+
+Restart DSH afterwards (profiles with HMR hot-mount it).
 
 ## Usage
 
@@ -132,6 +142,7 @@ Important memories (user preferences / decisions / corrections) go through DSH's
 
 | Version | Date | Changes |
 |---|---|---|
+| **v0.10.1** | 2026-10-25 | Rewrote the plugin card copy: localized title and one-line summary in `locale` `meta`, and a `description` without the version prefix or feature dump; no functional changes |
 | **v0.10.0** | 2026-10-05 | **Rebuilt as a memory layer**: trigger-driven recall (`trigger`/`realm`/`mtype`/`mkey` columns), type-priority ordering, five cleanup rules with tombstones and `compact.log`, workflow promotion and chains, injection budget (<=8 items / <=1200 chars), `compact`/`dump`; **removed** dream/reflect/conflict-adjudication/audit and the automatic Markdown mirror |
 | v0.9.2 | 2026-09-29 | Removed dead modules and config keys; docs aligned with implementation |
 | v0.9.1 | 2026-09-29 | Removed the management UI; plugin became host-only |

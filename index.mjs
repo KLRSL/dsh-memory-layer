@@ -208,7 +208,7 @@ function makeMemoryTool(ctx) {
       if (action === 'restore') {
         if (!fp) return { ok: false, error: 'fp 必填' }
         const r = restoreEntry(fp)
-        return r.ok ? { ok: true, note: `已回滚 [fp:${fp}]（来源备份：${r.backup}）` } : r
+        return r.ok ? { ok: true, note: r.note || `已回滚 [fp:${fp}]（来源备份：${r.backup}）` } : r
       }
       if (action === 'pin' || action === 'unpin') {
         if (!fp) return { ok: false, error: 'fp 必填（先 query 找到指纹）' }

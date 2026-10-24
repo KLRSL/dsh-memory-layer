@@ -162,6 +162,18 @@ test('compact：workflow 久未使用降权；error/decision 永不自动淘汰'
   assert.equal(db.getByFp('c-old-dec').status, 'active', 'decision 保留')
 })
 
+test('compact：锁定条目豁免全部清理规则（v0.10.1）', () => {
+  const old = new Date(Date.now() - 200 * 86400000).toISOString()
+  db.upsertEntry({ fp: 'c-pinned-fact', text: '锁定的老事实', mtype: 'fact', realm: 'user', created_at: old, last_accessed: old, hits: 0, pinned: 1 })
+  db.upsertEntry({ fp: 'c-pinned-wf', text: '锁定的老流程', mtype: 'workflow', realm: 'user', created_at: old, last_accessed: old, hits: 0, weight: 10, pinned: 1 })
+  db.upsertEntry({ fp: 'c-free-fact', text: '未锁定的老事实', mtype: 'fact', realm: 'user', created_at: old, last_accessed: old, hits: 0 })
+  const r = C.compact({})
+  assert.equal(db.getByFp('c-pinned-fact').status, 'active', 'pinned 的 fact 不进墓碑')
+  assert.equal(db.getByFp('c-pinned-wf').weight, 10, 'pinned 的 workflow 不降权')
+  assert.equal(db.getByFp('c-free-fact').status, 'deleted', '未锁定照常清理')
+  assert.equal(r.skippedPinned >= 2, true, JSON.stringify(r.skippedPinned))
+})
+
 test('dump：导出 Markdown，含类型分节与工作流链', () => {
   const r = C.dump({ dir: tmp })
   assert.ok(fs.existsSync(r.file))
